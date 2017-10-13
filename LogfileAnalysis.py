@@ -11,7 +11,7 @@ class LogfileAnalysis(SSHLibrary):
         self.login(login,passwd)
 
     def syslog_contains_text_message(self,log_file_path,tail,message):
-        cmd='tail -'+str(tail)+' '+log_file_path
+        cmd='tail -'+str(tail)+' '+log_file_path+' |'+'tac'
         self.start_command(cmd)
         output=self.read_command_output()
         logger.console(output)
@@ -35,6 +35,6 @@ class LogfileAnalysis(SSHLibrary):
 
 if __name__=='__main__':
     handler=LogfileAnalysis('192.168.56.101','root',None)
-    #handler.syslog_contains_text_message('/logs/syslog','50','data 641')
+    handler.syslog_contains_text_message('/logs/syslog','50','data')
     handler.syslog_match_regex('/logs/syslog', '50', 'data\s[0-9][0-9][0-9]')
     handler.close_ssh_connection()
